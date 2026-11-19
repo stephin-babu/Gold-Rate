@@ -1,8 +1,4 @@
-# 🪙 KeralaGold Open
-
-> An open-source, mobile-first, lightweight web application for tracking Kerala gold and silver rates, interactive price trends, and calculating real-world jewellery purchase costs. Inspired by [KeralaGold.com](https://www.keralagold.com/daily-gold-prices.htm).
-
----
+# 🪙 KeralaGold Opencode
 
 ## 🌟 Highlights
 
@@ -34,7 +30,7 @@
 
 ---
 
-## 🚀 Quick Start / How to Run
+##  Quick Start / How to Run
 
 ### Method 1: Double-Click (Local Browser)
 Simply double-click `index.html` to open it in Google Chrome, Microsoft Edge, Mozilla Firefox, or Safari. Everything functions instantly with bundled data.
@@ -66,7 +62,7 @@ Then visit `http://localhost:8080`.
 
 ---
 
-## 📊 How to Update Daily Rates
+## How to Update Daily Rates
 
 Daily rates are defined in clean JSON format inside [`data/gold-rates.json`](data/gold-rates.json):
 
@@ -101,7 +97,7 @@ You can update this file manually every day or set up a simple GitHub Action sch
 
 ---
 
-## 🧮 Kerala Jewellery Calculation Formula Explained
+##  Kerala Jewellery Calculation Formula Explained
 
 When purchasing gold ornaments in Kerala, the billing follows this standardized formula:
 
@@ -113,6 +109,6 @@ $$\text{Total Invoice Price} = \text{Taxable Amount} + \text{GST} + \text{BIS Ha
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the **MIT License** - free for personal, educational, or commercial use.
