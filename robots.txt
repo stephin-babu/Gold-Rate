@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://keralagoldrate.netlify.app/sitemap.xml

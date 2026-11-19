@@ -126,9 +126,9 @@ function initTheme() {
   const savedTheme = localStorage.getItem("keralagold_theme");
   const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   const activeTheme = savedTheme || (prefersDark ? "dark" : "light");
-  
+
   setTheme(activeTheme);
-  
+
   const toggleBtn = document.getElementById("themeToggle");
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
@@ -162,43 +162,43 @@ async function fetchLiveGoldApi(manual = false) {
   const statusEl = document.getElementById("lastUpdatedTime");
   const badgeEl = document.getElementById("apiStatusBadge");
   const btnRefresh = document.getElementById("btnRefreshLive");
-  
+
   if (btnRefresh) {
     btnRefresh.innerHTML = "⏳ <span>Syncing...</span>";
     btnRefresh.style.pointerEvents = "none";
   }
   if (statusEl) statusEl.textContent = "Connecting to live gold feed...";
-  
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 7000); // 7s timeout
-    
+
     // Fetch live Gold and Silver in INR concurrently
     const [goldRes, silverRes] = await Promise.allSettled([
       fetch("https://api.gold-api.com/price/XAU/INR", { signal: controller.signal }),
       fetch("https://api.gold-api.com/price/XAG/INR", { signal: controller.signal })
     ]);
-    
+
     clearTimeout(timeoutId);
-    
+
     if (goldRes.status === "fulfilled" && goldRes.value.ok) {
       const goldData = await goldRes.value.json();
-      
+
       // Calculate rates in INR (goldData.price is INR per troy ounce)
       const spotGramInr = goldData.price / TROY_OUNCE_TO_GRAMS;
-      
+
       // Calculate 24K Retail Kerala rate with Indian import duties
       const rate24kGram = Math.round(spotGramInr * KERALA_RETAIL_IMPORT_MULTIPLIER);
       const rate24kPavan = rate24kGram * 8;
-      
+
       // Calculate 22K (916 Hallmark) = 22/24 purity
       const rate22kGram = Math.round(rate24kGram * (22 / 24));
       const rate22kPavan = rate22kGram * 8;
-      
+
       // Calculate 18K (750 Hallmark) = 18/24 purity
       const rate18kGram = Math.round(rate24kGram * (18 / 24));
       const rate18kPavan = rate18kGram * 8;
-      
+
       // Process Silver if available
       let silverGram = 102.0;
       let silverKg = 102000;
@@ -209,7 +209,7 @@ async function fetchLiveGoldApi(manual = false) {
         if (silverGram < 80 || silverGram > 130) silverGram = 102.0;
         silverKg = Math.round(silverGram * 1000);
       }
-      
+
       // Baseline comparison (Yesterday's close)
       const yesterdayGram = state.data.rates["22k"].yesterdayGram || 12215;
       const yesterdayPavan = yesterdayGram * 8;
@@ -217,7 +217,7 @@ async function fetchLiveGoldApi(manual = false) {
       const changeGram = rate22kGram - yesterdayGram;
       const changePct = Number(((changePavan / yesterdayPavan) * 100).toFixed(2));
       const trend = changePavan >= 0 ? "up" : "down";
-      
+
       // Update state
       state.data.lastUpdated = new Date().toISOString();
       state.data.rates["22k"] = {
@@ -230,7 +230,7 @@ async function fetchLiveGoldApi(manual = false) {
         changePercent: changePct,
         trend: trend
       };
-      
+
       state.data.rates["24k"] = {
         gram: rate24kGram,
         pavan: rate24kPavan,
@@ -241,7 +241,7 @@ async function fetchLiveGoldApi(manual = false) {
         changePercent: changePct,
         trend: trend
       };
-      
+
       state.data.rates["18k"] = {
         gram: rate18kGram,
         pavan: rate18kPavan,
@@ -252,7 +252,7 @@ async function fetchLiveGoldApi(manual = false) {
         changePercent: changePct,
         trend: trend
       };
-      
+
       state.data.rates.silver = {
         gram: silverGram,
         kg: silverKg,
@@ -260,21 +260,21 @@ async function fetchLiveGoldApi(manual = false) {
         changePercent: -1.45,
         trend: "down"
       };
-      
+
       // Update badge & status
       if (badgeEl) {
-        badgeEl.textContent = "LIVE API (SYNCED)";
+        badgeEl.textContent = "LIVE";
         badgeEl.style.background = "#DCFCE7";
         badgeEl.style.color = "#15803D";
         badgeEl.style.borderColor = "#86EFAC";
       }
-      
+
       // Re-render UI with new live prices
       renderApp();
-      
+
       const now = new Date();
       if (statusEl) {
-        statusEl.textContent = `Live Feed Synced at ${now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })}`;
+        statusEl.textContent = `Updated at ${now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true })}`;
       }
     } else {
       throw new Error("Live gold API did not return OK");
@@ -282,18 +282,18 @@ async function fetchLiveGoldApi(manual = false) {
   } catch (err) {
     console.warn("Live API fetch notice (using benchmark data):", err);
     if (badgeEl) {
-      badgeEl.textContent = "BENCHMARK MODE";
+      badgeEl.textContent = "OFFLINE";
       badgeEl.style.background = "#FEF3C7";
       badgeEl.style.color = "#B45309";
       badgeEl.style.borderColor = "#FDE68A";
     }
     const d = new Date(state.data.lastUpdated);
     if (statusEl) {
-      statusEl.textContent = `Benchmark: ${d.toLocaleDateString("en-IN", { month: "short", day: "numeric" })} at ${d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true })}`;
+      statusEl.textContent = `Updated: ${d.toLocaleDateString("en-IN", { month: "short", day: "numeric" })} at ${d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true })}`;
     }
   } finally {
     if (btnRefresh) {
-      btnRefresh.innerHTML = "🔄 <span>Sync Live API</span>";
+      btnRefresh.innerHTML = "🔄 <span>Sync Now</span>";
       btnRefresh.style.pointerEvents = "auto";
     }
   }
@@ -311,10 +311,10 @@ async function loadGoldData() {
     console.warn("Using bundled fallback gold dataset:", err);
     state.data = DEFAULT_DATA;
   }
-  
+
   // First render benchmark data
   renderApp();
-  
+
   // Then automatically attempt live market API sync
   fetchLiveGoldApi();
 }
@@ -324,6 +324,7 @@ function renderApp() {
   renderLiveHeader();
   renderHeroRates();
   renderMonthHighLow();
+  renderBuyAdvisor();
   renderChart();
   renderHistoryTable();
   setupCalculator();
@@ -339,10 +340,10 @@ function renderLiveHeader() {
     month: "long",
     day: "numeric"
   });
-  
+
   const headerDate = document.getElementById("headerLiveDate");
   if (headerDate) headerDate.textContent = dateStr;
-  
+
   const lastUpdatedEl = document.getElementById("lastUpdatedTime");
   if (lastUpdatedEl) {
     const timeStr = d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true });
@@ -353,13 +354,13 @@ function renderLiveHeader() {
 // Render Hero Rate Cards (22K, 24K, 18K, Silver)
 function renderHeroRates() {
   const r = state.data.rates;
-  
+
   // 22K (Featured)
   const r22k = r["22k"];
   const el22kPavan = document.getElementById("rate22kPavan");
   const el22kGram = document.getElementById("rate22kGram");
   const el22kTrend = document.getElementById("trend22k");
-  
+
   if (el22kPavan) el22kPavan.textContent = formatCurrency(r22k.pavan);
   if (el22kGram) el22kGram.textContent = formatCurrency(r22k.gram);
   if (el22kTrend) {
@@ -370,7 +371,7 @@ function renderHeroRates() {
     el22kTrend.className = `trend-badge ${trendClass}`;
     el22kTrend.innerHTML = `${arrow} ₹${changeAbs.toLocaleString("en-IN")} (${r22k.changePercent}%) Today`;
   }
-  
+
   // 24K Pure Gold
   const r24k = r["24k"];
   const el24kPavan = document.getElementById("rate24kPavan");
@@ -383,7 +384,7 @@ function renderHeroRates() {
     el24kTrend.className = `trend-badge ${isDown ? "down" : "up"}`;
     el24kTrend.innerHTML = `${isDown ? "▼" : "▲"} ₹${Math.abs(r24k.changePavan).toLocaleString("en-IN")}`;
   }
-  
+
   // 18K Gold
   const r18k = r["18k"];
   const el18kPavan = document.getElementById("rate18kPavan");
@@ -396,7 +397,7 @@ function renderHeroRates() {
     el18kTrend.className = `trend-badge ${isDown ? "down" : "up"}`;
     el18kTrend.innerHTML = `${isDown ? "▼" : "▲"} ₹${Math.abs(r18k.changePavan).toLocaleString("en-IN")}`;
   }
-  
+
   // Silver
   const rSil = r.silver;
   const elSilKg = document.getElementById("rateSilverKg");
@@ -415,56 +416,142 @@ function renderHeroRates() {
 function renderMonthHighLow() {
   const stats = state.data.monthStats;
   if (!stats) return;
-  
+
   const elHighPavan = document.getElementById("statHighPavan");
   const elHighGram = document.getElementById("statHighGram");
   const elHighDate = document.getElementById("statHighDate");
-  
+
   const elLowPavan = document.getElementById("statLowPavan");
   const elLowGram = document.getElementById("statLowGram");
   const elLowDate = document.getElementById("statLowDate");
-  
+
   if (elHighPavan) elHighPavan.textContent = formatCurrency(stats.highest.pavan);
   if (elHighGram) elHighGram.textContent = `₹${stats.highest.gram.toLocaleString("en-IN")} / gm`;
   if (elHighDate) elHighDate.textContent = stats.highest.date;
-  
+
   if (elLowPavan) elLowPavan.textContent = formatCurrency(stats.lowest.pavan);
   if (elLowGram) elLowGram.textContent = `₹${stats.lowest.gram.toLocaleString("en-IN")} / gm`;
   if (elLowDate) elLowDate.textContent = stats.lowest.date;
+}
+
+// Global active horizon for Buy Score
+let currentHorizon = "now";
+
+// Calculate and Render "Good Time to Buy?" Score
+function renderBuyAdvisor() {
+  const scoreNumEl = document.getElementById("buyScoreNumber");
+  const verdictTitleEl = document.getElementById("buyVerdictTitle");
+  const verdictDescEl = document.getElementById("buyVerdictDesc");
+  const indicatorCircle = document.getElementById("gaugeIndicatorCircle");
+
+  if (!scoreNumEl) return;
+
+  const currentPavan = state.data.rates["22k"].pavan;
+  const highPavan = state.data.monthStats?.highest?.pavan || 107080;
+  const lowPavan = state.data.monthStats?.lowest?.pavan || 95840;
+
+  // Base raw score (0 = Highest of month/Worst time, 100 = Lowest of month/Best time)
+  let rawScore = 50;
+  if (highPavan > lowPavan) {
+    rawScore = Math.round(((highPavan - currentPavan) / (highPavan - lowPavan)) * 100);
+  }
+  rawScore = Math.max(5, Math.min(95, rawScore));
+
+  // Adjust slightly based on horizon tab
+  let displayScore = rawScore;
+  if (currentHorizon === "15") {
+    displayScore = Math.min(95, Math.max(10, rawScore - 12));
+  } else if (currentHorizon === "30") {
+    displayScore = Math.min(95, Math.max(10, rawScore - 20));
+  }
+
+  let color = "#10B981"; // green
+  let title = "Great deal";
+  let desc = "Price is near the monthly low. Excellent time to purchase.";
+
+  if (displayScore < 25) {
+    color = "#EF4444"; // red
+    title = "Weak deal";
+    desc = "Price is higher than usual. Consider waiting for a price dip.";
+  } else if (displayScore < 50) {
+    color = "#F97316"; // orange
+    title = "Fair deal";
+    desc = "Price is slightly elevated. Buy if needed, or wait for next dip.";
+  } else if (displayScore < 75) {
+    color = "#EAB308"; // yellow
+    title = "Good deal";
+    desc = "Price is below average. Favorable buying conditions.";
+  } else {
+    color = "#10B981"; // green
+    title = "Great deal";
+    desc = "Price is near monthly lows. Strong buy opportunity.";
+  }
+
+  scoreNumEl.textContent = displayScore;
+  scoreNumEl.style.color = color;
+  verdictTitleEl.textContent = title;
+  verdictTitleEl.style.color = color;
+  verdictDescEl.textContent = desc;
+
+  // Calculate gauge indicator (cx, cy) along semi-circle radius R=90 from center (120, 120)
+  // angle spans from 180 deg (Wait / score 0) to 0 deg (Buy / score 100)
+  const angleDeg = 180 - (displayScore / 100) * 180;
+  const angleRad = (angleDeg * Math.PI) / 180;
+  const cx = 120 + 90 * Math.cos(angleRad);
+  const cy = 120 - 90 * Math.sin(angleRad);
+
+  if (indicatorCircle) {
+    indicatorCircle.setAttribute("cx", cx.toFixed(1));
+    indicatorCircle.setAttribute("cy", cy.toFixed(1));
+    indicatorCircle.setAttribute("stroke", color);
+  }
+}
+
+// Setup Horizon Buttons
+function setupBuyAdvisorControls() {
+  const horizonButtons = document.querySelectorAll(".horizon-tab");
+  horizonButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      horizonButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentHorizon = btn.dataset.horizon;
+      renderBuyAdvisor();
+    });
+  });
 }
 
 // Render Chart.js
 function renderChart() {
   const ctx = document.getElementById("goldTrendChart");
   if (!ctx) return;
-  
+
   // Process history data in chronological order (oldest to newest)
   const historyRaw = [...state.data.history].reverse();
   const slicedData = historyRaw.slice(-state.chartRange);
-  
+
   const labels = slicedData.map(item => {
     const d = item.date.split("-");
     const sessionSuffix = item.session !== "Regular" ? ` (${item.session[0]})` : "";
     return `${d[0]} ${d[1]}${sessionSuffix}`;
   });
-  
+
   const isPavan = state.chartUnit === "pavan";
   const dataPoints = slicedData.map(item => isPavan ? item.pavan22k : item.gram22k);
-  
+
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
   const textColor = isDark ? "#CBD5E1" : "#475569";
   const gridColor = isDark ? "rgba(255, 255, 255, 0.07)" : "rgba(0, 0, 0, 0.06)";
-  
+
   if (state.chartInstance) {
     state.chartInstance.destroy();
   }
-  
+
   // Create gradient
   const chartCanvas = ctx.getContext("2d");
   const gradient = chartCanvas.createLinearGradient(0, 0, 0, 300);
   gradient.addColorStop(0, isDark ? "rgba(212, 175, 55, 0.45)" : "rgba(212, 175, 55, 0.35)");
   gradient.addColorStop(1, isDark ? "rgba(212, 175, 55, 0.0)" : "rgba(212, 175, 55, 0.0)");
-  
+
   state.chartInstance = new Chart(ctx, {
     type: "line",
     data: {
@@ -500,7 +587,7 @@ function renderChart() {
           padding: 10,
           displayColors: false,
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               return `Rate: ${formatCurrency(context.parsed.y)}`;
             }
           }
@@ -516,7 +603,7 @@ function renderChart() {
           ticks: {
             color: textColor,
             font: { size: 11 },
-            callback: function(val) {
+            callback: function (val) {
               return "₹" + (val / 1000).toFixed(0) + "k";
             }
           }
@@ -543,7 +630,7 @@ function setupChartControls() {
       renderChart();
     });
   });
-  
+
   const rangeButtons = document.querySelectorAll("[data-chart-range]");
   rangeButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -559,39 +646,39 @@ function setupChartControls() {
 function renderHistoryTable(filterText = "") {
   const tbody = document.getElementById("historyTableBody");
   if (!tbody) return;
-  
+
   tbody.innerHTML = "";
-  
+
   const filtered = state.data.history.filter(item => {
     if (!filterText) return true;
     const q = filterText.toLowerCase();
     return item.date.toLowerCase().includes(q) || item.session.toLowerCase().includes(q);
   });
-  
+
   if (filtered.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; color: var(--text-muted);">No records found matching "${filterText}"</td></tr>`;
     return;
   }
-  
+
   filtered.forEach((row, index) => {
     const tr = document.createElement("tr");
-    
+
     // Highlight today or extreme records
     if (index === 0) {
       tr.classList.add("row-highlight");
     }
-    
+
     let tagHtml = "";
     if (row.tag === "Highest of Month") {
       tagHtml = `<span class="badge-tag highest">Highest</span>`;
     } else if (row.tag === "Lowest of Month") {
       tagHtml = `<span class="badge-tag lowest">Lowest</span>`;
     }
-    
-    const sessionHtml = row.session !== "Regular" 
-      ? `<span class="session-badge">${row.session}</span>` 
+
+    const sessionHtml = row.session !== "Regular"
+      ? `<span class="session-badge">${row.session}</span>`
       : "";
-    
+
     let changeHtml = "-";
     if (row.change > 0) {
       changeHtml = `<span style="color: var(--down-color); font-weight: 600;">+₹${row.change.toLocaleString("en-IN")}</span>`;
@@ -600,14 +687,14 @@ function renderHistoryTable(filterText = "") {
     } else {
       changeHtml = `<span style="color: var(--text-muted);">0</span>`;
     }
-    
+
     tr.innerHTML = `
       <td><strong>${row.date}</strong> ${sessionHtml} ${tagHtml}</td>
       <td><strong>₹${row.pavan22k.toLocaleString("en-IN")}</strong></td>
       <td>₹${row.gram22k.toLocaleString("en-IN")}</td>
       <td>${changeHtml}</td>
     `;
-    
+
     tbody.appendChild(tr);
   });
 }
@@ -632,26 +719,26 @@ function setupCalculator() {
   const makingValueDisplay = document.getElementById("calcMakingVal");
   const makingChips = document.querySelectorAll(".calc-making-chip");
   const huidCheckbox = document.getElementById("calcHuidCheckbox");
-  
+
   function recalculate() {
     let weight = parseFloat(weightInput.value) || 0;
     if (weight < 0) weight = 0;
-    
+
     const isPavan = state.calcUnit === "pavan";
     const weightInGrams = isPavan ? weight * 8 : weight;
-    
+
     const karatKey = karatSelect.value;
     const gramRate = state.data.rates[karatKey]?.gram || state.data.rates["22k"].gram;
-    
+
     const baseCost = weightInGrams * gramRate;
     const makingPct = parseFloat(makingSlider.value) || 0;
     const makingCharge = baseCost * (makingPct / 100);
     const taxableAmount = baseCost + makingCharge;
     const gstAmount = taxableAmount * 0.03; // 3% standard GST
     const huidCharge = (huidCheckbox && huidCheckbox.checked && weight > 0) ? 53.10 : 0; // ₹45 + 18% GST
-    
+
     const grandTotal = taxableAmount + gstAmount + huidCharge;
-    
+
     // Update breakdown UI
     const elWeightSummary = document.getElementById("calcSummaryWeight");
     const elBasePrice = document.getElementById("calcSummaryBase");
@@ -660,10 +747,10 @@ function setupCalculator() {
     const elGst = document.getElementById("calcSummaryGst");
     const elHuid = document.getElementById("calcSummaryHuid");
     const elTotal = document.getElementById("calcSummaryTotal");
-    
+
     if (elWeightSummary) {
-      elWeightSummary.textContent = isPavan 
-        ? `${weight} Pavan (${formatNum(weightInGrams)} Grams)` 
+      elWeightSummary.textContent = isPavan
+        ? `${weight} Pavan (${formatNum(weightInGrams)} Grams)`
         : `${weight} Grams (${formatNum(weight / 8)} Pavan)`;
     }
     if (elBasePrice) elBasePrice.textContent = formatCurrency(baseCost);
@@ -673,11 +760,11 @@ function setupCalculator() {
     if (elHuid) elHuid.textContent = huidCharge > 0 ? `+ ${formatCurrency(huidCharge, true)}` : "₹0";
     if (elTotal) elTotal.textContent = formatCurrency(grandTotal);
   }
-  
+
   if (weightInput) {
     weightInput.addEventListener("input", recalculate);
   }
-  
+
   if (unitPavanBtn && unitGramBtn) {
     unitPavanBtn.addEventListener("click", () => {
       unitPavanBtn.classList.add("active");
@@ -687,7 +774,7 @@ function setupCalculator() {
       if (suffix) suffix.textContent = "Pavan";
       recalculate();
     });
-    
+
     unitGramBtn.addEventListener("click", () => {
       unitGramBtn.classList.add("active");
       unitPavanBtn.classList.remove("active");
@@ -697,11 +784,11 @@ function setupCalculator() {
       recalculate();
     });
   }
-  
+
   if (karatSelect) {
     karatSelect.addEventListener("change", recalculate);
   }
-  
+
   if (makingSlider) {
     makingSlider.addEventListener("input", (e) => {
       const val = e.target.value;
@@ -712,7 +799,7 @@ function setupCalculator() {
       recalculate();
     });
   }
-  
+
   makingChips.forEach(chip => {
     chip.addEventListener("click", () => {
       const pct = chip.dataset.pct;
@@ -723,11 +810,11 @@ function setupCalculator() {
       recalculate();
     });
   });
-  
+
   if (huidCheckbox) {
     huidCheckbox.addEventListener("change", recalculate);
   }
-  
+
   // Initial calculation
   recalculate();
 }
@@ -737,26 +824,26 @@ function setupReverseCalculator() {
   const budgetInput = document.getElementById("reverseBudgetInput");
   const budgetChips = document.querySelectorAll(".budget-preset-chip");
   const makingSelect = document.getElementById("reverseMakingSelect");
-  
+
   function recalculateReverse() {
     let budget = parseFloat(budgetInput.value) || 0;
     if (budget < 0) budget = 0;
-    
+
     const gramRate22k = state.data.rates["22k"].gram;
     const makingPct = parseFloat(makingSelect ? makingSelect.value : 10) || 10;
-    
+
     // Total price for 1 gram jewellery = gramRate * (1 + makingPct/100) * 1.03 (GST)
     const effectiveRatePerGram = gramRate22k * (1 + (makingPct / 100)) * 1.03;
-    
+
     const gramsAffordable = budget > 0 ? (budget / effectiveRatePerGram) : 0;
     const pavansAffordable = gramsAffordable / 8;
     const wholePavans = Math.floor(pavansAffordable);
     const remainingGrams = gramsAffordable - (wholePavans * 8);
-    
+
     const elYieldPavan = document.getElementById("reverseYieldPavan");
     const elYieldDetail = document.getElementById("reverseYieldDetail");
     const elGramRateEffective = document.getElementById("reverseEffectiveGramRate");
-    
+
     if (elYieldPavan) {
       elYieldPavan.textContent = `${formatNum(pavansAffordable, 2)} Pavan`;
     }
@@ -767,15 +854,15 @@ function setupReverseCalculator() {
       elGramRateEffective.textContent = `Effective Jeweller Rate: ${formatCurrency(effectiveRatePerGram)}/gm (incl. ${makingPct}% VA & 3% GST)`;
     }
   }
-  
+
   if (budgetInput) {
     budgetInput.addEventListener("input", recalculateReverse);
   }
-  
+
   if (makingSelect) {
     makingSelect.addEventListener("change", recalculateReverse);
   }
-  
+
   budgetChips.forEach(chip => {
     chip.addEventListener("click", () => {
       budgetChips.forEach(c => c.classList.remove("active"));
@@ -784,13 +871,13 @@ function setupReverseCalculator() {
       recalculateReverse();
     });
   });
-  
+
   // Setup Mode Switching (Standard vs Reverse Calculator)
   const tabStandard = document.getElementById("tabCalcStandard");
   const tabReverse = document.getElementById("tabCalcReverse");
   const viewStandard = document.getElementById("calcStandardView");
   const viewReverse = document.getElementById("calcReverseView");
-  
+
   if (tabStandard && tabReverse && viewStandard && viewReverse) {
     tabStandard.addEventListener("click", () => {
       tabStandard.classList.add("active");
@@ -798,7 +885,7 @@ function setupReverseCalculator() {
       viewStandard.style.display = "grid";
       viewReverse.style.display = "none";
     });
-    
+
     tabReverse.addEventListener("click", () => {
       tabReverse.classList.add("active");
       tabStandard.classList.remove("active");
@@ -807,7 +894,7 @@ function setupReverseCalculator() {
       recalculateReverse();
     });
   }
-  
+
   recalculateReverse();
 }
 
@@ -815,14 +902,15 @@ function setupReverseCalculator() {
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   setupChartControls();
+  setupBuyAdvisorControls();
   setupTableSearch();
-  
+
   const btnRefresh = document.getElementById("btnRefreshLive");
   if (btnRefresh) {
     btnRefresh.addEventListener("click", () => {
       fetchLiveGoldApi(true);
     });
   }
-  
+
   loadGoldData();
 });

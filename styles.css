@@ -269,12 +269,16 @@ body {
 /* Main Content Area */
 main {
   flex: 1;
-  padding: 1.5rem 0 3rem;
+  padding: 3.5rem 0 4rem;
 }
 
 /* Section Common */
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+#rates {
+  margin-top: 1.5rem;
 }
 
 .section-header {
@@ -475,6 +479,123 @@ main {
 .high-low-date {
   font-size: 0.78rem;
   color: var(--text-secondary);
+}
+
+/* Buy Score / Good Time to Buy Card */
+.buy-score-card {
+  max-width: 440px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  position: relative;
+}
+
+.buy-score-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+}
+
+.gauge-container {
+  position: relative;
+  width: 240px;
+  height: 135px;
+  margin: 0 auto 0.25rem;
+}
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gauge-center-val {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-score-number {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #10B981; /* dynamic */
+  letter-spacing: -1px;
+}
+
+.gauge-score-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.gauge-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 210px;
+  margin: 0 auto 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.buy-verdict-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.buy-verdict-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #10B981; /* dynamic */
+  margin-bottom: 0.25rem;
+}
+
+.buy-verdict-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.buy-horizon-tabs {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: 4px;
+}
+
+.horizon-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.6rem;
+  border-radius: calc(var(--radius-md) - 2px);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.horizon-tab.active {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Chart Section */
