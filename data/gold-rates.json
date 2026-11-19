@@ -1,0 +1,83 @@
+{
+  "currency": "INR",
+  "symbol": "₹",
+  "lastUpdated": "2026-11-19T09:30:00+05:30",
+  "location": "Kerala, India",
+  "rates": {
+    "22k": {
+      "gram": 11980,
+      "pavan": 95840,
+      "yesterdayGram": 12215,
+      "yesterdayPavan": 97720,
+      "changeGram": -235,
+      "changePavan": -1880,
+      "changePercent": -1.92,
+      "trend": "down"
+    },
+    "24k": {
+      "gram": 13069,
+      "pavan": 104552,
+      "yesterdayGram": 13325,
+      "yesterdayPavan": 106600,
+      "changeGram": -256,
+      "changePavan": -2048,
+      "changePercent": -1.92,
+      "trend": "down"
+    },
+    "18k": {
+      "gram": 9802,
+      "pavan": 78416,
+      "yesterdayGram": 9994,
+      "yesterdayPavan": 79952,
+      "changeGram": -192,
+      "changePavan": -1536,
+      "changePercent": -1.92,
+      "trend": "down"
+    },
+    "silver": {
+      "gram": 102.00,
+      "kg": 102000,
+      "changeGram": -1.5,
+      "changePercent": -1.45,
+      "trend": "down"
+    }
+  },
+  "monthStats": {
+    "month": "November 2026",
+    "highest": {
+      "date": "5th & 6th Nov 2026",
+      "pavan": 107080,
+      "gram": 13385
+    },
+    "lowest": {
+      "date": "19th Nov 2026",
+      "pavan": 95840,
+      "gram": 11980
+    }
+  },
+  "history": [
+    { "date": "19-Nov-2026", "session": "Morning", "gram22k": 11980, "pavan22k": 95840, "tag": "Lowest of Month", "change": -1880 },
+    { "date": "18-Nov-2026", "session": "Regular", "gram22k": 12215, "pavan22k": 97720, "tag": "", "change": -2040 },
+    { "date": "17-Nov-2026", "session": "Regular", "gram22k": 12470, "pavan22k": 99760, "tag": "", "change": -560 },
+    { "date": "16-Nov-2026", "session": "Regular", "gram22k": 12540, "pavan22k": 100320, "tag": "", "change": -600 },
+    { "date": "15-Nov-2026", "session": "Regular", "gram22k": 12615, "pavan22k": 100920, "tag": "", "change": 0 },
+    { "date": "14-Nov-2026", "session": "Regular", "gram22k": 12615, "pavan22k": 100920, "tag": "", "change": 200 },
+    { "date": "13-Nov-2026", "session": "Afternoon", "gram22k": 12590, "pavan22k": 100720, "tag": "", "change": -840 },
+    { "date": "13-Nov-2026", "session": "Morning", "gram22k": 12695, "pavan22k": 101560, "tag": "", "change": -960 },
+    { "date": "12-Nov-2026", "session": "Regular", "gram22k": 12815, "pavan22k": 102520, "tag": "", "change": -1600 },
+    { "date": "11-Nov-2026", "session": "Regular", "gram22k": 13015, "pavan22k": 104120, "tag": "", "change": -520 },
+    { "date": "10-Nov-2026", "session": "Evening", "gram22k": 13080, "pavan22k": 104640, "tag": "", "change": -1040 },
+    { "date": "10-Nov-2026", "session": "Morning", "gram22k": 13210, "pavan22k": 105680, "tag": "", "change": -360 },
+    { "date": "09-Nov-2026", "session": "Regular", "gram22k": 13255, "pavan22k": 106040, "tag": "", "change": 760 },
+    { "date": "08-Nov-2026", "session": "Regular", "gram22k": 13160, "pavan22k": 105280, "tag": "", "change": 0 },
+    { "date": "07-Nov-2026", "session": "Regular", "gram22k": 13160, "pavan22k": 105280, "tag": "", "change": 80 },
+    { "date": "06-Nov-2026", "session": "Afternoon", "gram22k": 13150, "pavan22k": 105200, "tag": "", "change": -1880 },
+    { "date": "06-Nov-2026", "session": "Morning", "gram22k": 13385, "pavan22k": 107080, "tag": "Highest of Month", "change": 0 },
+    { "date": "05-Nov-2026", "session": "Regular", "gram22k": 13385, "pavan22k": 107080, "tag": "Highest of Month", "change": 2360 },
+    { "date": "04-Nov-2026", "session": "Afternoon", "gram22k": 13090, "pavan22k": 104720, "tag": "", "change": 2120 },
+    { "date": "04-Nov-2026", "session": "Morning", "gram22k": 12825, "pavan22k": 102600, "tag": "", "change": 200 },
+    { "date": "03-Nov-2026", "session": "Regular", "gram22k": 12800, "pavan22k": 102400, "tag": "", "change": 200 },
+    { "date": "02-Nov-2026", "session": "Regular", "gram22k": 12775, "pavan22k": 102200, "tag": "", "change": 360 },
+    { "date": "01-Nov-2026", "session": "Regular", "gram22k": 12730, "pavan22k": 101840, "tag": "", "change": 0 }
+  ]
+}

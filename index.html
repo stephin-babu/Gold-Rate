@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Kerala Gold Price Today - Live 22K, 24K, 1 Pavan Gold Rate & Calculator</title>
+  <meta name="description" content="Open-source daily Kerala gold and silver rates. Check today's 1 Pavan (8 Grams) 22 Karat 916 hallmark gold rate, price charts, month high/low records, and jewellery GST calculator.">
+  <meta name="keywords" content="kerala gold price, today gold rate kerala, 1 pavan gold rate, 916 gold price kerala, gold jewellery price calculator, kerala gold open source">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪙</text></svg>">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="header">
+    <div class="container">
+      <div class="nav-container">
+        <a href="#rates" class="brand">
+          <div class="brand-icon">KG</div>
+          <div class="brand-info">
+            <h1>KeralaGold <span class="brand-badge">OPEN</span></h1>
+            <p>Kerala Gold & Silver Rate Tracker</p>
+          </div>
+        </a>
+        
+        <div class="nav-actions">
+          <ul class="nav-links">
+            <li><a href="#rates">Today's Rates</a></li>
+            <li><a href="#chart-section">Price Trends</a></li>
+            <li><a href="#calculator">Jeweller Calculator</a></li>
+            <li><a href="#history">Daily History</a></li>
+          </ul>
+          
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle Theme">
+            <span>🌙</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Market Status Bar -->
+  <div class="market-status-bar">
+    <div class="container">
+      <div class="status-content">
+        <div class="market-live-indicator">
+          <span class="pulse-dot" id="liveDot"></span>
+          <span>Kerala Market Rate: <strong id="headerLiveDate">Thursday, 19 November 2026</strong></span>
+          <span id="apiStatusBadge" class="brand-badge" style="background:#E0F2FE;color:#0284C7;border-color:#BAE6FD;">LIVE API</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <div class="last-updated" id="lastUpdatedTime">
+            Connecting to live gold market...
+          </div>
+          <button id="btnRefreshLive" class="preset-chip" style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;cursor:pointer;font-weight:600;" title="Click to fetch live rates from Gold API">
+            🔄 <span>Sync Live API</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container">
+    
+    <!-- Hero / Today's Live Rates Section -->
+    <section class="section" id="rates">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">✨ Today's Gold & Silver Rate in Kerala</h2>
+          <p class="section-subtitle">Official benchmark jewellery rate for Kerala jewellers (1 Pavan = 8 Grams)</p>
+        </div>
+      </div>
+
+      <div class="rates-grid">
+        <!-- 22K 916 Hallmark (Featured) -->
+        <article class="rate-card featured">
+          <span class="card-badge-top">Most Popular</span>
+          <div class="rate-header">
+            <div>
+              <h3 class="karat-title">22K Gold (916 Hallmark)</h3>
+              <p class="karat-desc">Standard Kerala jewellery standard</p>
+            </div>
+          </div>
+          
+          <div class="rate-primary">
+            <span class="price-unit-label">Price for 1 Pavan (8 Grams)</span>
+            <div class="primary-price" id="rate22kPavan">₹95,840</div>
+          </div>
+          
+          <div class="rate-secondary">
+            <div>
+              <span class="price-unit-label">Rate per 1 Gram</span>
+              <div class="secondary-price" id="rate22kGram">₹11,980</div>
+            </div>
+            <div id="trend22k" class="trend-badge down">
+              ▼ ₹1,880 (-1.92%) Today
+            </div>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+            📌 <em>Used for bangles, necklaces, earrings, and wedding ornaments.</em>
+          </div>
+        </article>
+
+        <!-- 24K Pure Gold -->
+        <article class="rate-card">
+          <div class="rate-header">
+            <div>
+              <h3 class="karat-title">24K Gold (999 Pure)</h3>
+              <p class="karat-desc">Gold coins, biscuits & bars</p>
+            </div>
+          </div>
+          
+          <div class="rate-primary">
+            <span class="price-unit-label">Price for 1 Pavan (8 Grams)</span>
+            <div class="primary-price" id="rate24kPavan">₹1,04,552</div>
+          </div>
+          
+          <div class="rate-secondary">
+            <div>
+              <span class="price-unit-label">Rate per 1 Gram</span>
+              <div class="secondary-price" id="rate24kGram">₹13,069</div>
+            </div>
+            <div id="trend24k" class="trend-badge down">
+              ▼ ₹2,048
+            </div>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+            📌 <em>Pure 99.9% investment grade bullion.</em>
+          </div>
+        </article>
+
+        <!-- 18K Gold -->
+        <article class="rate-card">
+          <div class="rate-header">
+            <div>
+              <h3 class="karat-title">18K Gold (750 Hallmark)</h3>
+              <p class="karat-desc">Modern & diamond studded jewellery</p>
+            </div>
+          </div>
+          
+          <div class="rate-primary">
+            <span class="price-unit-label">Price for 1 Pavan (8 Grams)</span>
+            <div class="primary-price" id="rate18kPavan">₹78,416</div>
+          </div>
+          
+          <div class="rate-secondary">
+            <div>
+              <span class="price-unit-label">Rate per 1 Gram</span>
+              <div class="secondary-price" id="rate18kGram">₹9,802</div>
+            </div>
+            <div id="trend18k" class="trend-badge down">
+              ▼ ₹1,536
+            </div>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+            📌 <em>High tensile strength for stone settings.</em>
+          </div>
+        </article>
+
+        <!-- Silver Rates -->
+        <article class="rate-card">
+          <div class="rate-header">
+            <div>
+              <h3 class="karat-title">Kerala Silver Rate</h3>
+              <p class="karat-desc">Standard 999 Fine Silver</p>
+            </div>
+          </div>
+          
+          <div class="rate-primary">
+            <span class="price-unit-label">Price per 1 Kilogram (1000g)</span>
+            <div class="primary-price" id="rateSilverKg">₹1,02,000</div>
+          </div>
+          
+          <div class="rate-secondary">
+            <div>
+              <span class="price-unit-label">Rate per 1 Gram</span>
+              <div class="secondary-price" id="rateSilverGram">₹102.00</div>
+            </div>
+            <div id="trendSilver" class="trend-badge down">
+              ▼ -1.45%
+            </div>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+            📌 <em>Kerala silverware and silver coin benchmark.</em>
+          </div>
+        </article>
+      </div>
+
+      <!-- Month High / Low Highlights -->
+      <div class="high-low-grid">
+        <div class="high-low-card highest">
+          <div class="high-low-icon">🔺</div>
+          <div class="high-low-info">
+            <h4>Highest of November 2026</h4>
+            <div class="high-low-price" id="statHighPavan">₹1,07,080 / Pavan</div>
+            <div class="high-low-date"><span id="statHighDate">5th & 6th Nov 2026</span> (<span id="statHighGram">₹13,385 / gm</span>)</div>
+          </div>
+        </div>
+
+        <div class="high-low-card lowest">
+          <div class="high-low-icon">🔻</div>
+          <div class="high-low-info">
+            <h4>Lowest of November 2026</h4>
+            <div class="high-low-price" id="statLowPavan">₹95,840 / Pavan</div>
+            <div class="high-low-date"><span id="statLowDate">19th Nov 2026 (Today)</span> (<span id="statLowGram">₹11,980 / gm</span>)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Price Trend Chart Section -->
+    <section class="section" id="chart-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">📈 Daily Gold Price Chart & Trend</h2>
+          <p class="section-subtitle">22 Karat (916) Kerala daily rate movements for November 2026</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-controls">
+          <div class="btn-group">
+            <button class="btn-toggle active" data-chart-unit="pavan">1 Pavan (8g)</button>
+            <button class="btn-toggle" data-chart-unit="gram">1 Gram</button>
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn-toggle" data-chart-range="7">7 Days</button>
+            <button class="btn-toggle" data-chart-range="15">15 Days</button>
+            <button class="btn-toggle active" data-chart-range="30">All November</button>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <canvas id="goldTrendChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Jewellery Shop Price & Tax Calculator -->
+    <section class="section" id="calculator">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🧮 Jewellery Shop Price & Tax Calculator</h2>
+          <p class="section-subtitle">Calculate the exact on-counter billing price with making charges (VA), GST & Hallmarking</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <div class="calc-mode-switch">
+        <button class="mode-tab active" id="tabCalcStandard">Standard Jewellery Purchase Calculator</button>
+        <button class="mode-tab" id="tabCalcReverse">Budget to Gold Calculator ("How Much Gold for ₹X?")</button>
+      </div>
+
+      <!-- Standard Calculator View -->
+      <div class="calc-container" id="calcStandardView">
+        <div class="calc-inputs">
+          
+          <!-- Unit & Weight -->
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="calcWeight" class="input-label">Gold Weight to Purchase</label>
+              <div class="unit-switch-pill">
+                <button type="button" class="unit-btn active" id="calcUnitPavan">Pavan (8g)</button>
+                <button type="button" class="unit-btn" id="calcUnitGram">Grams</button>
+              </div>
+            </div>
+            <div class="number-input-wrap">
+              <input type="number" id="calcWeight" class="number-input" value="1" min="0.1" step="0.5">
+              <span class="input-suffix" id="calcWeightSuffix">Pavan</span>
+            </div>
+            <span class="input-helper">1 Pavan (Sovereign) equals exactly 8 grams</span>
+          </div>
+
+          <!-- Karat Selection -->
+          <div class="input-group">
+            <label for="calcKarat" class="input-label">Purity / Karat</label>
+            <select id="calcKarat" class="number-input">
+              <option value="22k" selected>22 Karat (916 Hallmark) - ₹11,980/g</option>
+              <option value="24k">24 Karat (999 Pure) - ₹13,069/g</option>
+              <option value="18k">18 Karat (750 Hallmark) - ₹9,802/g</option>
+            </select>
+          </div>
+
+          <!-- Making Charges (VA / Wastage) -->
+          <div class="input-group">
+            <div class="input-label-row">
+              <label for="calcMakingSlider" class="input-label">Making Charges / Wastage (VA)</label>
+              <span class="slider-val-box" id="calcMakingVal">10%</span>
+            </div>
+            
+            <div class="presets-wrap">
+              <button type="button" class="preset-chip calc-making-chip" data-pct="5">5% (Simple Chain/Coin)</button>
+              <button type="button" class="preset-chip calc-making-chip" data-pct="8">8% (Plain Bangles)</button>
+              <button type="button" class="preset-chip calc-making-chip active" data-pct="10">10% (Standard)</button>
+              <button type="button" class="preset-chip calc-making-chip" data-pct="14">14% (Intricate / Antique)</button>
+            </div>
+
+            <div class="slider-wrap" style="margin-top: 0.5rem;">
+              <input type="range" id="calcMakingSlider" class="range-slider" min="3" max="25" value="10" step="0.5">
+            </div>
+            <span class="input-helper">Jewellers in Kerala typically charge 5% to 15% making charges depending on design intricacy.</span>
+          </div>
+
+          <!-- HUID Hallmark Fee Option -->
+          <div class="input-group" style="flex-direction: row; align-items: center; gap: 0.75rem;">
+            <input type="checkbox" id="calcHuidCheckbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="calcHuidCheckbox" style="font-size: 0.85rem; color: var(--text-secondary); cursor: pointer;">
+              Include BIS HUID Hallmarking Fee (₹45 + 18% GST = ₹53.10)
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Calculator Breakdown Receipt -->
+        <div class="calc-breakdown">
+          <div>
+            <div class="breakdown-title">
+              <span>Estimated Billing Breakdown</span>
+              <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);" id="calcSummaryWeight">1 Pavan (8 Grams)</span>
+            </div>
+
+            <div class="breakdown-list">
+              <div class="breakdown-item">
+                <span>Base Gold Price:</span>
+                <span id="calcSummaryBase">₹95,840</span>
+              </div>
+              <div class="breakdown-item">
+                <span>Approx. Making Charges:</span>
+                <span id="calcSummaryMaking" style="color: var(--gold-dark);">+ ₹9,584 (10%)</span>
+              </div>
+              <div class="breakdown-item subtotal">
+                <span>Total Taxable Amount:</span>
+                <span id="calcSummaryTaxable">₹1,05,424</span>
+              </div>
+              <div class="breakdown-item">
+                <span>GST (3% on Taxable):</span>
+                <span id="calcSummaryGst" style="color: var(--text-secondary);">+ ₹3,163</span>
+              </div>
+              <div class="breakdown-item">
+                <span>Hallmarking (HUID):</span>
+                <span id="calcSummaryHuid" style="color: var(--text-secondary);">+ ₹53.10</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="breakdown-total">
+            <div class="total-label">Total Jewellery Shop Price</div>
+            <div class="total-amount" id="calcSummaryTotal">₹1,08,640</div>
+            <div class="total-note">* Final billing may vary slightly depending on exact store wastage policies & rounded cents.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reverse Calculator View (Budget to Gold) -->
+      <div class="calc-container" id="calcReverseView" style="display: none;">
+        <div class="calc-inputs">
+          <div class="input-group">
+            <label for="reverseBudgetInput" class="input-label">Enter Your Target Budget in Rupees (₹)</label>
+            <div class="number-input-wrap">
+              <input type="number" id="reverseBudgetInput" class="number-input" value="100000" step="5000">
+              <span class="input-suffix">INR</span>
+            </div>
+            
+            <div class="presets-wrap" style="margin-top: 0.6rem;">
+              <button type="button" class="preset-chip budget-preset-chip" data-amount="50000">₹50,000</button>
+              <button type="button" class="preset-chip budget-preset-chip active" data-amount="100000">₹1,00,000 (1 Lakh)</button>
+              <button type="button" class="preset-chip budget-preset-chip" data-amount="200000">₹2,00,000 (2 Lakh)</button>
+              <button type="button" class="preset-chip budget-preset-chip" data-amount="500000">₹5,00,000 (5 Lakh)</button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="reverseMakingSelect" class="input-label">Expected Average Making Charges</label>
+            <select id="reverseMakingSelect" class="number-input">
+              <option value="5">5% (Lightweight items)</option>
+              <option value="8">8% (Plain jewellery)</option>
+              <option value="10" selected>10% (Kerala standard average)</option>
+              <option value="14">14% (Intricate ornaments)</option>
+            </select>
+          </div>
+
+          <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; padding: 0.75rem; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+            💡 <strong>Kerala Gold Buying Tip:</strong> If buying for weddings or long-term value, asking for lower wastage (5-8%) can save thousands of rupees on larger purchases.
+          </div>
+        </div>
+
+        <div class="calc-breakdown">
+          <div>
+            <div class="breakdown-title">
+              <span>Approximate Gold Yield</span>
+              <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-muted);">22K Gold (916)</span>
+            </div>
+
+            <div style="text-align: center; padding: 1.5rem 0;">
+              <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">You Can Buy Approx:</span>
+              <div style="font-size: 2.25rem; font-weight: 800; color: var(--text-primary); margin: 0.35rem 0;" id="reverseYieldPavan">0.92 Pavan</div>
+              <div style="font-size: 1rem; font-weight: 600; color: var(--gold-dark);" id="reverseYieldDetail">(0 Pavan and 7.37 Grams)</div>
+            </div>
+          </div>
+
+          <div class="breakdown-total">
+            <div class="total-label">Effective Jeweller Cost Rate</div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem;" id="reverseEffectiveGramRate">
+              Effective Jeweller Rate: ₹13,561/gm (incl. 10% VA & 3% GST)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Price History Table Section -->
+    <section class="section" id="history">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">📅 Daily Price History - November 2026</h2>
+          <p class="section-subtitle">Kerala daily gold price table showing morning & afternoon sessions</p>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="table-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="tableSearchInput" class="search-input" placeholder="Search by date (e.g. 19-Nov, Morning)...">
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-muted);">
+            All rates benchmarked in Indian Rupees (₹) for 22K 916 Gold
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>Date & Session</th>
+                <th>Price for 1 Pavan (8g)</th>
+                <th>Price for 1 Gram (22K)</th>
+                <th>Daily Change</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Populated dynamically by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Source & Knowledge Section -->
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">📖 Kerala Gold Knowledge & Open Source Transparency</h2>
+          <p class="section-subtitle">Understand Kerala gold measurements, hallmarking, and open architecture</p>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon">⚖️</div>
+          <h4>What is 1 Pavan?</h4>
+          <p>In Kerala, 1 Pavan (also known as sovereign) is standardly defined as <strong>8 Grams</strong> of gold. Ornaments in Kerala are predominantly priced and weighed in Pavans.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🔍</div>
+          <h4>BIS 916 Hallmark</h4>
+          <p>916 indicates 22 Karat gold (91.6% purity). Always ensure ornaments carry the mandatory 6-character alphanumeric BIS HUID code for guaranteed purity verification.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">💡</div>
+          <h4>Making Charges & GST</h4>
+          <p>Standard Kerala jewellery purchases include the base gold rate, plus Making Charges (usually 5% to 15%), followed by a 3% central GST tax applied on the total.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🌐</div>
+          <h4>100% Open Source</h4>
+          <p>Zero tracking, zero ads, open JSON schema. Easily fork, customize, or host free on GitHub Pages for local communities, shops, or personal financial tracking.</p>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Disclaimer:</strong> Gold rates displayed on this page are benchmark indicative rates for Kerala jeweller associations. Individual retail jewellery shops may vary slightly in making charges, wastage (VA), and special promotional discounts. Always confirm final invoices directly with certified BIS hallmarked jewellers before purchasing.
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>KeralaGold Open</h3>
+          <p>A modern, open-source web application for checking daily Kerala gold rates, historical price charts, and accurate jewellery purchase calculators.</p>
+        </div>
+        
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#rates">Today's Rates</a></li>
+            <li><a href="#chart-section">Price Chart</a></li>
+            <li><a href="#calculator">Jeweller Calculator</a></li>
+            <li><a href="#history">November History</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Open Source</h4>
+          <ul class="footer-links">
+            <li><a href="data/gold-rates.json" target="_blank">Rates JSON API</a></li>
+            <li><a href="README.md" target="_blank">Documentation</a></li>
+            <li><a href="https://github.com" target="_blank" rel="noopener">GitHub Project</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>KeralaGold Open &copy; 2026. Released under the MIT Open Source License.</div>
+        <div>Designed for fast, mobile-responsive viewing across all devices.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Script -->
+  <script src="app.js"></script>
+
+</body>
+</html>
